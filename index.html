@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Banda Hacker Club - Digital Yodha</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -52,22 +52,29 @@
       left: 0;
       width: 100%;
       height: 100%;
-      opacity: 0.1;
+      opacity: 0.05;
       z-index: -1;
       overflow: hidden;
+      pointer-events: none;
     }
     
     .matrix-code {
       position: absolute;
       color: var(--neon-green);
-      font-size: 14px;
+      font-size: 16px;
       font-family: 'Courier New', monospace;
       opacity: 0.7;
-      animation: fall linear infinite;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      white-space: nowrap;
+      animation: fall linear forwards;
     }
     
     @keyframes fall {
-      to {
+      0% {
+        transform: translateY(-100%);
+      }
+      100% {
         transform: translateY(100vh);
       }
     }
@@ -280,6 +287,51 @@
       font-weight: bold;
     }
     
+    /* Terminal effect */
+    .terminal {
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid var(--neon-green);
+      border-radius: 8px;
+      padding: 15px;
+      margin: 20px 0;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    
+    .dot-red { background: #ff5f56; }
+    .dot-yellow { background: #ffbd2e; }
+    .dot-green { background: #27c93f; }
+    
+    .terminal-content {
+      color: var(--neon-green);
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    
+    .terminal-content::after {
+      content: "▋";
+      animation: blink 1s infinite;
+    }
+    
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    
     /* Form styles */
     .form-container {
       background: linear-gradient(145deg, rgba(30, 30, 47, 0.9), rgba(45, 0, 75, 0.7));
@@ -370,6 +422,25 @@
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(157, 78, 221, 0.6);
       background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+    }
+    
+    /* Notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 25px;
+      background: var(--neon-purple);
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 1000;
+      transform: translateX(150%);
+      transition: transform 0.4s ease;
+    }
+    
+    .notification.show {
+      transform: translateX(0);
     }
     
     /* Footer */
@@ -497,6 +568,11 @@
   <!-- Matrix background effect -->
   <div class="matrix-bg" id="matrixBg"></div>
   
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    Form submitted successfully! Telegram message sent.
+  </div>
+  
   <header>
     <h1>🚀 Banda Hacker Club</h1>
     <div class="tagline">Future Digital Yodha 🔥</div>
@@ -506,6 +582,20 @@
     <div class="hero">
       <h2>Become a Digital Warrior</h2>
       <p>Join our elite community of tech enthusiasts and master the digital skills that shape the future. From design to development, AI to automation - transform your passion into profit.</p>
+      
+      <div class="terminal">
+        <div class="terminal-header">
+          <div class="terminal-dot dot-red"></div>
+          <div class="terminal-dot dot-yellow"></div>
+          <div class="terminal-dot dot-green"></div>
+        </div>
+        <div class="terminal-content" id="terminalContent">
+          > Welcome to Banda Hacker Club<br>
+          > System initializing...<br>
+          > Accessing digital skills database...<br>
+          > Ready to transform your future!
+        </div>
+      </div>
     </div>
     
     <div class="grid-container">
@@ -568,26 +658,26 @@
     
     <div class="form-container">
       <h2>📥 Join Banda Hacker Club</h2>
-      <form action="#" method="post">
+      <form id="joinForm">
         <div class="form-grid">
           <div class="form-group">
             <label for="name">पूरा नाम:</label>
-            <input type="text" id="name" name="name" required />
+            <input type="text" id="name" name="name" required>
           </div>
           
           <div class="form-group">
             <label for="age">उम्र:</label>
-            <input type="number" id="age" name="age" required />
+            <input type="number" id="age" name="age" required>
           </div>
           
           <div class="form-group">
             <label for="phone">मोबाइल नंबर:</label>
-            <input type="tel" id="phone" name="phone" required />
+            <input type="tel" id="phone" name="phone" required>
           </div>
           
           <div class="form-group">
             <label for="location">लोकेशन / गांव / मोहल्ला:</label>
-            <input type="text" id="location" name="location" required />
+            <input type="text" id="location" name="location" required>
           </div>
           
           <div class="form-group">
@@ -607,7 +697,7 @@
           </div>
         </div>
         
-        <input type="submit" value="✅ Club में Join करें" />
+        <input type="submit" value="✅ Club में Join करें">
       </form>
     </div>
   </div>
@@ -623,52 +713,121 @@
   </footer>
   
   <script>
-    // Matrix background effect
+    // Telegram bot configuration
+    const TELEGRAM_BOT_TOKEN = '7729928604:AAEINikbhwHTMSK1pgV3nROUfSGEVb-z2r4';
+    const TELEGRAM_CHAT_ID = '6798434092';
+    
+    // Optimized Matrix background effect
     const matrixBg = document.getElementById('matrixBg');
     const chars = "01";
+    const columns = Math.floor(window.innerWidth / 20);
+    let matrixElements = [];
     
     function createMatrix() {
-      const columns = Math.floor(window.innerWidth / 20);
-      
+      // Clear existing
+      matrixBg.innerHTML = '';
+      matrixElements = [];
+         // Create new
       for (let i = 0; i < columns; i++) {
         const code = document.createElement('div');
         code.classList.add('matrix-code');
+        code.style.left = `${(i * 20) + Math.random() * 10}px`;
+        code.style.animationDuration = `${5 + Math.random() * 15}s`;
+        code.style.animationDelay = `${Math.random() * 5}s`;
         
-        // Random position
-        const left = Math.random() * 100;
-        code.style.left = `${left}%`;
-        
-        // Random animation duration
-        const duration = 5 + Math.random() * 15;
-        code.style.animationDuration = `${duration}s`;
-        
-        // Random animation delay
-        const delay = Math.random() * 5;
-        code.style.animationDelay = `${delay}s`;
-        
-        // Generate random code
-        let codeContent = '';
-        const rows = 20 + Math.floor(Math.random() * 20);
-        
-        for (let j = 0; j < rows; j++) {
-          const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));
-          codeContent += randomChar + '<br>';
+        // Generate initial content
+        const length = 10 + Math.floor(Math.random() * 20);
+        let content = '';
+        for (let j = 0; j < length; j++) {
+          content += chars.charAt(Math.floor(Math.random() * chars.length)) + '<br>';
         }
+        code.innerHTML = content;
         
-        code.innerHTML = codeContent;
         matrixBg.appendChild(code);
+        matrixElements.push(code);
       }
     }
     
+    // Initial creation
     createMatrix();
     
-    // Form submission
-    const form = document.querySelector('form');
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      alert('Thank you for your interest! Our team will contact you shortly.');
-      form.reset();
+    // Update on resize
+    window.addEventListener('resize', () => {
+      createMatrix();
     });
+    
+    // Form submission to Telegram
+    const form = document.getElementById('joinForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Get form data
+      const formData = {
+        name: document.getElementById('name').value,
+        age: document.getElementById('age').value,
+        phone: document.getElementById('phone').value,
+        location: document.getElementById('location').value,
+        skill: document.getElementById('skill').value,
+        goal: document.getElementById('goal').value
+      };
+      
+      // Format message for Telegram
+      const message = `📥 *New Registration for Banda Hacker Club* 📥
+      
+      *Name:* ${formData.name}
+      *Age:* ${formData.age}
+      *Phone:* ${formData.phone}
+      *Location:* ${formData.location}
+      *Skill to Learn:* ${formData.skill}
+      *Goal:* ${formData.goal}
+      
+      _Form submitted at ${new Date().toLocaleString()}_`;
+      
+      try {
+        // Send to Telegram
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'Markdown'
+          })
+        });
+        
+        // Show success notification
+        showNotification('Form submitted successfully! Telegram message sent.');
+        
+        // Update terminal
+        const terminalContent = document.getElementById('terminalContent');
+        terminalContent.innerHTML = `
+          > Form submitted successfully!<br>
+          > Welcome to Banda Hacker Club<br>
+          > Our team will contact you shortly<br>
+          > Access granted to Digital Yodha resources
+        `;
+        
+        // Reset form
+        form.reset();
+      } catch (error) {
+        console.error('Error sending to Telegram:', error);
+        showNotification('Error sending message. Please try again later.', true);
+      }
+    });
+    
+    // Show notification
+    function showNotification(message, isError = false) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.style.background = isError ? '#ff4d4f' : '#9d4edd';
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 5000);
+    }
     
     // Card hover effects
     const cards = document.querySelectorAll('.card');
@@ -683,4 +842,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
